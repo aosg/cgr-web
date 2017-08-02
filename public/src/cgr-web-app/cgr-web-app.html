@@ -31,7 +31,7 @@
         <mtz-wizard-step name="{{compentency.$key}}" label="{{compentency.name}}">
           <h2>{{compentency.name}}</h2>
           <template is="dom-repeat" items="{{_toArray(compentency.question)}}" as="question">
-            <cgr-question main-title={{question.value.name}}></cgr-question>    
+            <cgr-question main-title={{question.value.name}} color={{compentency.order}}></cgr-question>    
           </template>
         </mtz-wizard-step>  
       </template>

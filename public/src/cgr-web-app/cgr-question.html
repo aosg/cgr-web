@@ -16,11 +16,31 @@
             paper-slider {
                 width: 100%;
             }
+            :host([color="1"]) paper-slider {
+                --paper-slider-active-color: var(--paper-green-700);
+                --paper-slider-secondary-color: var(--paper-green-300);
+                --paper-slider-knob-color: var(--paper-green-700);
+                --paper-slider-pin-color: var(--paper-green-700);
+            }
+            /* .color2 {
+                --paper-pink-300
+            }
+            .color3 {
+                --paper-yellow-300
+            }
+            .color4 {
+                --paper-teal-300
+            }
+            .color6 {
+                --paper-grey-300
+            }
+            .color5 {
+                --paper-blue-300
+            } */
         </style>
         <h3>{{mainTitle}}</h3>
         <paper-slider markers max-markers=5 min=1 max=5 snaps step=1 value pin></paper-slider>
     </template>
-
     <script>
         class CGRQuestionElement extends Polymer.Element {
 
@@ -33,7 +53,10 @@
                     },
                     score: {
                         type: Number
-                    }
+                    },
+                    color: {
+                        type: Number
+                    },
                 };
             }
 
