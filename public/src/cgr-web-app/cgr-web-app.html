@@ -30,17 +30,13 @@
       <template is="dom-repeat" items="{{compentencies}}" as="compentency">
         <mtz-wizard-step name="{{compentency.$key}}" label="{{compentency.name}}">
           <h2>{{compentency.name}}</h2>
-          <firebase-query
-            app="cgr"
-            path="compentency/{{compentency.$key}}/question"
-            data="{{questions}}">
-          </firebase-query>
-          <template is="dom-repeat" items="{{questions}}" as="question">
-            <cgr-question main-title={{question.name}}></cgr-question>    
+          <template is="dom-repeat" items="{{_toArray(compentency.question)}}" as="question">
+            <cgr-question main-title={{question.value.name}}></cgr-question>    
           </template>
         </mtz-wizard-step>  
       </template>
     </mtz-wizard>
+    <mtz-wizard-stepper steps="[[steps]]" selected="{{selected}}"></mtz-wizard-stepper>
   </template>
 
   <script>
@@ -60,6 +56,14 @@
           }
         };
       }
+      _toArray(obj) {
+          return Object.keys(obj).map(function(key) {
+            return {
+              name: key,
+              value: obj[key]
+            };
+          });
+        }
     }
 
     window.customElements.define(CgrWebApp.is, CgrWebApp);
