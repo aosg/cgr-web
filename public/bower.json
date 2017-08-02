@@ -1,0 +1,16 @@
+{
+  "name": "cgr-web",
+  "description": "This project aims to build an site for assessment tool for pastoral development",
+  "main": "index.html",
+  "dependencies": {
+    "polymer": "Polymer/polymer#^2.0.0",
+    "mtz-wizard": "MaritzSTL/mtz-wizard#^0.1.4",
+    "paper-slider": "PolymerElements/paper-slider#^2.0.2",
+    "paper-card": "PolymerElements/paper-card#^2.0.0",
+    "polymerfire": "firebase/polymerfire#^2.1.0"
+  },
+  "devDependencies": {
+    "web-component-tester": "Polymer/web-component-tester#^6.0.0",
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^1.0.0"
+  }
+}

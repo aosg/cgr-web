@@ -1,0 +1,7 @@
+{
+  "name": "cgr-web",
+  "short_name": "cgr-web",
+  "description": "This project aims to build an site for assessment tool for pastoral development. Pastor, together with the ministerial secretary, will be able to create a personal development plan for the coming year",
+  "start_url": "/",
+  "display": "standalone"
+}

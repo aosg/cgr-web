@@ -1,0 +1,56 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+
+<link rel="import" href="../../bower_components/paper-slider/paper-slider.html">
+
+<!--
+`<cgr-question>` is Description
+
+@element cgr-question
+-->
+<dom-module id="cgr-question">
+    <template>
+        <style>
+            :host {
+                display: block
+            }
+            paper-slider {
+                width: 100%;
+            }
+        </style>
+        <h3>{{mainTitle}}</h3>
+        <paper-slider markers max-markers=5 min=1 max=5 snaps step=1 value pin></paper-slider>
+    </template>
+
+    <script>
+        class CGRQuestionElement extends Polymer.Element {
+
+            static get is() { return 'cgr-question'; }
+
+            static get properties() {
+                return {
+                    mainTitle: {
+                        type: String
+                    },
+                    score: {
+                        type: Number
+                    }
+                };
+            }
+
+            constructor() {
+                super();
+            }
+
+            ready() {
+                super.ready();
+
+                Polymer.RenderStatus.afterNextRender(this, function() {
+                    
+                });
+            }
+
+        }
+
+        window.customElements.define(CGRQuestionElement.is, CGRQuestionElement);
+    </script>
+</dom-module>

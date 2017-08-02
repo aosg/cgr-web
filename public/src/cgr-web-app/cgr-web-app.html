@@ -1,0 +1,67 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+
+<link rel="import" href="../../bower_components/polymerfire/firebase-app.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-query.html">
+
+<link rel="import" href="../../bower_components/mtz-wizard/all-imports.html">
+
+<link rel="import" href="./cgr-question.html">
+
+<dom-module id="cgr-web-app">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+    <firebase-app
+      app="cgr"
+      api-key="AIzaSyAlzk6-3Iq1Z6F8QiElZq4mQUMwTzwJhUk"
+      auth-domain="cgr-web.firebaseapp.com"
+      database-url="https://cgr-web.firebaseio.com">
+    </firebase-app>
+    <firebase-query
+      app="cgr"
+      path="compentency"
+      data="{{compentencies}}">
+    </firebase-query>
+    <mtz-wizard-stepper steps="[[steps]]" selected="{{selected}}"></mtz-wizard-stepper>
+    <mtz-wizard id="wizard" active steps="{{steps}}" selected="{{selected}}">
+      <template is="dom-repeat" items="{{compentencies}}" as="compentency">
+        <mtz-wizard-step name="{{compentency.$key}}" label="{{compentency.name}}">
+          <h2>{{compentency.name}}</h2>
+          <firebase-query
+            app="cgr"
+            path="compentency/{{compentency.$key}}/question"
+            data="{{questions}}">
+          </firebase-query>
+          <template is="dom-repeat" items="{{questions}}" as="question">
+            <cgr-question main-title={{question.name}}></cgr-question>    
+          </template>
+        </mtz-wizard-step>  
+      </template>
+    </mtz-wizard>
+  </template>
+
+  <script>
+    /**
+     * @customElement
+     * @polymer
+     */
+    class CgrWebApp extends Polymer.Element {
+      static get is() { return 'cgr-web-app'; }
+      static get properties() {
+        return {
+          selected: {
+            type: String
+          },
+          steps: {
+            type: Array
+          }
+        };
+      }
+    }
+
+    window.customElements.define(CgrWebApp.is, CgrWebApp);
+  </script>
+</dom-module>
