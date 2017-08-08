@@ -11,35 +11,55 @@
     <template>
         <style>
             :host {
-                display: block
+                display: block;
+                padding: 30px;
+            }
+            h3 {
+                font-weight: lighter;
             }
             paper-slider {
+                margin-top: 30px;
                 width: 100%;
             }
-            :host([color="1"]) paper-slider {
+            .color1 {
                 --paper-slider-active-color: var(--paper-green-700);
                 --paper-slider-secondary-color: var(--paper-green-300);
                 --paper-slider-knob-color: var(--paper-green-700);
                 --paper-slider-pin-color: var(--paper-green-700);
             }
-            /* .color2 {
-                --paper-pink-300
+            .color2 {
+                --paper-slider-active-color: var(--paper-pink-700);
+                --paper-slider-secondary-color: var(--paper-pink-300);
+                --paper-slider-knob-color: var(--paper-pink-700);
+                --paper-slider-pin-color: var(--paper-pink-700);
             }
             .color3 {
-                --paper-yellow-300
+                --paper-slider-active-color: var(--paper-yellow-700);
+                --paper-slider-secondary-color: var(--paper-yellow-300);
+                --paper-slider-knob-color: var(--paper-yellow-700);
+                --paper-slider-pin-color: var(--paper-yellow-700);
             }
             .color4 {
-                --paper-teal-300
-            }
-            .color6 {
-                --paper-grey-300
+                --paper-slider-active-color: var(--paper-teal-700);
+                --paper-slider-secondary-color: var(--paper-teal-300);
+                --paper-slider-knob-color: var(--paper-teal-700);
+                --paper-slider-pin-color: var(--paper-teal-700);
             }
             .color5 {
-                --paper-blue-300
-            } */
+                --paper-slider-active-color: var(--paper-blue-700);
+                --paper-slider-secondary-color: var(--paper-blue-300);
+                --paper-slider-knob-color: var(--paper-blue-700);
+                --paper-slider-pin-color: var(--paper-blue-700);
+            }
+            .color6 {
+                --paper-slider-active-color: var(--paper-grey-700);
+                --paper-slider-secondary-color: var(--paper-grey-300);
+                --paper-slider-knob-color: var(--paper-grey-700);
+                --paper-slider-pin-color: var(--paper-grey-700);
+            }
         </style>
         <h3>{{mainTitle}}</h3>
-        <paper-slider markers max-markers=5 min=1 max=5 snaps step=1 value pin></paper-slider>
+        <paper-slider class$="color{{color}}" markers max-markers=5 min=1 max=5 snaps step=1 value pin></paper-slider>
     </template>
     <script>
         class CGRQuestionElement extends Polymer.Element {

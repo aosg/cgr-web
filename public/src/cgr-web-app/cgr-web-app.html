@@ -13,6 +13,31 @@
       :host {
         display: block;
       }
+      h2 {
+        -webkit-margin-before: 0;
+        -webkit-margin-after: 0;
+        line-height: 4em;
+        text-indent: 1em;
+        color: rgba(255,255,255,.75);
+      }
+      .color1 h2 {
+        background-color: var(--paper-green-700);
+      }
+      .color2 h2 {
+        background-color: var(--paper-pink-700);
+      }
+      .color3 h2 {
+        background-color: var(--paper-yellow-700);
+      }
+      .color4 h2 {
+        background-color: var(--paper-teal-700);
+      }
+      .color5 h2 {
+        background-color: var(--paper-blue-700);
+      }
+      .color6 h2 {
+        background-color: var(--paper-grey-700);
+      }
     </style>
     <firebase-app
       app="cgr"
@@ -25,10 +50,10 @@
       path="compentency"
       data="{{compentencies}}">
     </firebase-query>
-    <mtz-wizard-stepper steps="[[steps]]" selected="{{selected}}"></mtz-wizard-stepper>
+    <!-- <mtz-wizard-stepper steps="[[steps]]" selected="{{selected}}"></mtz-wizard-stepper> -->
     <mtz-wizard id="wizard" active steps="{{steps}}" selected="{{selected}}">
       <template is="dom-repeat" items="{{compentencies}}" as="compentency">
-        <mtz-wizard-step name="{{compentency.$key}}" label="{{compentency.name}}">
+        <mtz-wizard-step class$="color{{compentency.order}}" name="{{compentency.$key}}" label="{{compentency.name}}">
           <h2>{{compentency.name}}</h2>
           <template is="dom-repeat" items="{{_toArray(compentency.question)}}" as="question">
             <cgr-question main-title={{question.value.name}} color={{compentency.order}}></cgr-question>    
