@@ -1,11 +1,17 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 
+<link rel="import" href="../../bower_components/app-route/app-location.html">
+<link rel="import" href="../../bower_components/app-route/app-route.html">
+
 <link rel="import" href="../../bower_components/polymerfire/firebase-app.html">
 <link rel="import" href="../../bower_components/polymerfire/firebase-query.html">
+
+<link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
 
 <link rel="import" href="../../bower_components/mtz-wizard/all-imports.html">
 
 <link rel="import" href="./cgr-question.html">
+<link rel="import" href="./cgr-result-item.html">
 
 <dom-module id="cgr-web-app">
   <template>
@@ -13,6 +19,12 @@
       :host {
         display: block;
       }
+      
+      h1 {
+        font-weight: lighter;
+        text-indent: 15px;
+      }
+
       h2 {
         -webkit-margin-before: 0;
         -webkit-margin-after: 0;
@@ -20,25 +32,26 @@
         text-indent: 1em;
         color: rgba(255,255,255,.75);
       }
-      .color1 h2 {
-        background-color: var(--paper-green-700);
-      }
-      .color2 h2 {
-        background-color: var(--paper-pink-700);
-      }
-      .color3 h2 {
-        background-color: var(--paper-yellow-700);
-      }
-      .color4 h2 {
-        background-color: var(--paper-teal-700);
-      }
-      .color5 h2 {
-        background-color: var(--paper-blue-700);
-      }
-      .color6 h2 {
-        background-color: var(--paper-grey-700);
-      }
+      
+      .color1 h2 { background-color: var(--paper-green-700); }
+      .color2 h2 { background-color: var(--paper-pink-700); }
+      .color3 h2 { background-color: var(--paper-yellow-700); }
+      .color4 h2 { background-color: var(--paper-teal-700); }
+      .color5 h2 { background-color: var(--paper-blue-700); }
+      .color6 h2 { background-color: var(--paper-grey-700); }
+      .color7 h2 { background-color: var(--paper-amber-700); }
+      
+      cgr-result-item { margin: 15px 15px 0 15px; }      
+      cgr-result-item:last-of-type { margin-bottom: 15px; }
+      
     </style>
+    <app-location route="{{route}}"></app-location>
+    <app-route
+        route="{{route}}"
+        pattern="/:page"
+        data="{{routeData}}"
+        tail="{{routeTail}}">
+    </app-route>
     <firebase-app
       app="cgr"
       api-key="AIzaSyAlzk6-3Iq1Z6F8QiElZq4mQUMwTzwJhUk"
@@ -50,45 +63,62 @@
       path="compentency"
       data="{{compentencies}}">
     </firebase-query>
-    <!-- <mtz-wizard-stepper steps="[[steps]]" selected="{{selected}}"></mtz-wizard-stepper> -->
-    <mtz-wizard id="wizard" active steps="{{steps}}" selected="{{selected}}">
-      <template is="dom-repeat" items="{{compentencies}}" as="compentency">
-        <mtz-wizard-step class$="color{{compentency.order}}" name="{{compentency.$key}}" label="{{compentency.name}}">
-          <h2>{{compentency.name}}</h2>
-          <template is="dom-repeat" items="{{_toArray(compentency.question)}}" as="question">
-            <cgr-question main-title={{question.value.name}} color={{compentency.order}}></cgr-question>    
+    <iron-pages selected="{{pageSelected}}" attr-for-selected="name">
+      <div class="page" name="about">
+        Introduction Pages (Apresentation, Login)
+      </div>
+      <div class="page" name="questionary">
+        <mtz-wizard-stepper steps="[[questionarySteps]]" selected="{{questionarySelected}}"></mtz-wizard-stepper>
+        <mtz-wizard id="wizard" active steps="{{questionarySteps}}" selected="{{questionarySelected}}">
+          <template is="dom-repeat" items="{{compentencies}}" as="compentency">
+            <mtz-wizard-step class$="color{{compentency.order}}" name="{{compentency.$key}}" label="{{compentency.name}}">
+              <h2>{{compentency.name}}</h2>
+              <template is="dom-repeat" items="{{_toArray(compentency.question)}}" as="question">
+                <cgr-question main-title={{question.value.name}} color={{compentency.order}}></cgr-question>    
+              </template>
+            </mtz-wizard-step>  
           </template>
-        </mtz-wizard-step>  
-      </template>
-    </mtz-wizard>
-    <mtz-wizard-stepper steps="[[steps]]" selected="{{selected}}"></mtz-wizard-stepper>
+        </mtz-wizard>
+        <mtz-wizard-stepper steps="[[questionarySteps]]" selected="{{questionarySelected}}"></mtz-wizard-stepper>
+      </div>
+      <div class="page" name="result">
+        <h1>Competency Profile</h1>
+        <template is="dom-repeat" items="{{compentencies}}" as="compentency">
+          <cgr-result-item color="{{compentency.order}}" name="{{compentency.$key}}" value=50 main-title="{{compentency.name}}"></cgr-result-item>
+        </template>
+      </div>
+    </iron-pages>
   </template>
 
   <script>
-    /**
-     * @customElement
-     * @polymer
-     */
     class CgrWebApp extends Polymer.Element {
       static get is() { return 'cgr-web-app'; }
       static get properties() {
         return {
-          selected: {
-            type: String
+          pageSelected: {
+            type: String,
+            computed: 'computedPageSelected(routeData.page)',
+            value: 'result'
           },
-          steps: {
+          questionarySelected: {
+            type: Object
+          },
+          questionarySteps: {
             type: Array
           }
         };
       }
       _toArray(obj) {
-          return Object.keys(obj).map(function(key) {
-            return {
-              name: key,
-              value: obj[key]
-            };
-          });
-        }
+        return Object.keys(obj).map(function(key) {
+          return {
+            name: key,
+            value: obj[key]
+          };
+        });
+      }
+      computedPageSelected(routeDataPage) {
+        return routeDataPage
+      }
     }
 
     window.customElements.define(CgrWebApp.is, CgrWebApp);

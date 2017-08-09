@@ -1,0 +1,86 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+
+<link rel="import" href="../../bower_components/paper-progress/paper-progress.html">
+<link rel="import" href="../../bower_components/paper-material/paper-material.html">
+
+<!--
+`<cgr-result-item>` is Description
+
+@element cgr-result-item
+-->
+<dom-module id="cgr-result-item">
+    <template>
+        <style>
+            :host {
+                display: block
+            }
+            paper-material.color1 { background-color: var(--paper-green-100); }
+            paper-material.color2 { background-color: var(--paper-pink-100); }
+            paper-material.color3 { background-color: var(--paper-yellow-100); }
+            paper-material.color4 { background-color: var(--paper-teal-100); }
+            paper-material.color5 { background-color: var(--paper-blue-100); }
+            paper-material.color6 { background-color: var(--paper-grey-100); }
+            paper-material.color7 { background-color: var(--paper-amber-100); }
+            h2 {
+                font-weight: lighter;
+                padding: 15px;
+                font-size: 20px;
+                -webkit-margin-before: 0;
+                -webkit-margin-after: 0;
+            }
+            paper-progress {
+                width: calc(100% - 30px);
+                padding: 0 15px 15px 15px;
+                --paper-progress-height: 25px;
+                --paper-progress-container-color: rgba(255,255,255,.5);
+            }
+            .color1 { --paper-progress-active-color: var(--paper-green-700); }
+            .color2 { --paper-progress-active-color: var(--paper-pink-700); }
+            .color3 { --paper-progress-active-color: var(--paper-yellow-700); }
+            .color4 { --paper-progress-active-color: var(--paper-teal-700); }
+            .color5 { --paper-progress-active-color: var(--paper-blue-700); }
+            .color6 { --paper-progress-active-color: var(--paper-grey-700); }
+            .color7 { --paper-progress-active-color: var(--paper-amber-700); }
+        </style>
+        <paper-material elevation=1 class$="color{{color}}">
+            <h2>{{mainTitle}}</h2>
+            <paper-progress class$="color{{color}}" value="{{value}}"></paper-progress>
+        </paper-material>
+    </template>
+
+    <script>
+        class CGRResultItem extends Polymer.Element {
+
+            static get is() { return 'cgr-result-item'; }
+
+            static get properties() {
+                return {
+                    mainTitle: {
+                        type: String
+                    },
+                    color: {
+                        type: Number
+                    },
+                    value: {
+                        type: Number
+                    }
+                };
+            }
+
+            constructor() {
+                super();
+            }
+
+            ready() {
+                super.ready();
+
+                Polymer.RenderStatus.afterNextRender(this, function() {
+                    
+                });
+            }
+
+        }
+
+        window.customElements.define(CGRResultItem.is, CGRResultItem);
+    </script>
+</dom-module>
