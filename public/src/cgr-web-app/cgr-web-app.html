@@ -137,7 +137,6 @@
           <app-toolbar>
             <paper-icon-button icon="material:arrow-back" on-click="callQuestionaryPage"></paper-icon-button>
             <div main-title>Results for {{user.displayName}}</div>
-            <paper-icon-button id="startButton" class$="{{loginClass}}" icon="material:account-circle" on-click="login"></paper-icon-button>
           </app-toolbar>
           <template is="dom-repeat" items="{{competencies}}" as="competency">
             <cgr-result-item
