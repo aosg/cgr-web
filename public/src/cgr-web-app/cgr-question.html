@@ -2,6 +2,8 @@
 
 <link rel="import" href="../../bower_components/paper-slider/paper-slider.html">
 
+<link rel="import" href="../../bower_components/polymerfire/firebase-document.html">
+
 <!--
 `<cgr-question>` is Description
 
@@ -13,6 +15,7 @@
             :host {
                 display: block;
                 padding: 30px;
+                background-color: rgba(255,255,255,.95);
             }
             h3 {
                 font-weight: lighter;
@@ -57,9 +60,20 @@
                 --paper-slider-knob-color: var(--paper-grey-700);
                 --paper-slider-pin-color: var(--paper-grey-700);
             }
+            .color7 {
+                --paper-slider-active-color: var(--paper-amber-700);
+                --paper-slider-secondary-color: var(--paper-amber-300);
+                --paper-slider-knob-color: var(--paper-amber-700);
+                --paper-slider-pin-color: var(--paper-amber-700);
+            }
         </style>
+    <firebase-document
+      app="cgr"
+      path="results/{{userUid}}/2017/{{competencyKey}}/{{question.$key}}/value"
+      data="{{result}}">
+    </firebase-document>
         <h3>{{mainTitle}}</h3>
-        <paper-slider class$="color{{color}}" markers max-markers=5 min=1 max=5 snaps step=1 value pin></paper-slider>
+        <paper-slider value="{{result}}" class$="color{{competencyColor}}" markers max-markers=5 min=1 max=5 snaps step=1 pin></paper-slider>
     </template>
     <script>
         class CGRQuestionElement extends Polymer.Element {
@@ -68,15 +82,26 @@
 
             static get properties() {
                 return {
-                    mainTitle: {
+                    userUid: {
                         type: String
                     },
-                    score: {
+                    competencyKey: {
+                        type: String
+                    },
+                    competencyColor: {
                         type: Number
                     },
-                    color: {
-                        type: Number
+                    question: {
+                        type: Object
                     },
+                    mainTitle: {
+                        type: String,
+                        computed: 'computeMainTitle(question.val.name)'
+                    },
+                    result: {
+                        type: Number,
+                        notify: true
+                    }
                 };
             }
 
@@ -90,6 +115,14 @@
                 Polymer.RenderStatus.afterNextRender(this, function() {
                     
                 });
+            }
+
+            computeMainTitle(questionValName){
+                return questionValName
+            }
+
+            computeColor(competencyOrder) {
+                return competencyOrder
             }
 
         }

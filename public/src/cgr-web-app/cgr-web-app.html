@@ -4,14 +4,21 @@
 <link rel="import" href="../../bower_components/app-route/app-route.html">
 
 <link rel="import" href="../../bower_components/polymerfire/firebase-app.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-auth.html">
 <link rel="import" href="../../bower_components/polymerfire/firebase-query.html">
 
 <link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../../bower_components/iron-image/iron-image.html">
+
+<link rel="import" href="../../bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
 
 <link rel="import" href="../../bower_components/mtz-wizard/all-imports.html">
 
 <link rel="import" href="./cgr-question.html">
 <link rel="import" href="./cgr-result-item.html">
+<link rel="import" href="./material-icons.html">
 
 <dom-module id="cgr-web-app">
   <template>
@@ -19,75 +26,131 @@
       :host {
         display: block;
       }
-      
-      h1 {
-        font-weight: lighter;
-        text-indent: 15px;
+
+      #loginArea { display: block; }
+      #loginArea.signedIn { display: none; }
+      #appArea { display: none; }
+      #appArea.signedIn { display: block; }
+
+      #loginBox {
+        height: 370px;
+        width: 300px;
+        display: block;
+        margin: auto;
+        text-align: center;
+        padding: 15px;
+        margin-top: calc(50vh - 180px);
+        background-color: rgba(255, 255, 255, 0.8);
       }
 
-      h2 {
-        -webkit-margin-before: 0;
-        -webkit-margin-after: 0;
-        line-height: 4em;
-        text-indent: 1em;
-        color: rgba(255,255,255,.75);
+      #loginBox h1,
+      #loginBox h2,
+      #loginBox h5 {
+        font-weight: lighter;
       }
-      
-      .color1 h2 { background-color: var(--paper-green-700); }
-      .color2 h2 { background-color: var(--paper-pink-700); }
-      .color3 h2 { background-color: var(--paper-yellow-700); }
-      .color4 h2 { background-color: var(--paper-teal-700); }
-      .color5 h2 { background-color: var(--paper-blue-700); }
-      .color6 h2 { background-color: var(--paper-grey-700); }
-      .color7 h2 { background-color: var(--paper-amber-700); }
+      #loginButton {
+        background-color: #8fd6f6;
+      }
+            
+      .competencyToolbar.color1, .competencyToolbar.color1 paper-icon-button { color: white; background-color: var(--paper-green-700); }
+      .competencyToolbar.color2, .competencyToolbar.color2 paper-icon-button { color: white; background-color: var(--paper-pink-700); }
+      .competencyToolbar.color3, .competencyToolbar.color3 paper-icon-button { color: white; background-color: var(--paper-yellow-700); }
+      .competencyToolbar.color4, .competencyToolbar.color4 paper-icon-button { color: white; background-color: var(--paper-teal-700); }
+      .competencyToolbar.color5, .competencyToolbar.color5 paper-icon-button { color: white; background-color: var(--paper-blue-700); }
+      .competencyToolbar.color6, .competencyToolbar.color6 paper-icon-button { color: white; background-color: var(--paper-grey-700); }
+      .competencyToolbar.color7, .competencyToolbar.color7 paper-icon-button { color: white; background-color: var(--paper-amber-700); }
       
       cgr-result-item { margin: 15px 15px 0 15px; }      
       cgr-result-item:last-of-type { margin-bottom: 15px; }
       
+      #photo {
+        width: 100px;
+        height: 100px;
+      }
+
+      /* #startButton.signedIn { color: var(--paper-teal-700); } */
+      
     </style>
-    <app-location route="{{route}}"></app-location>
-    <app-route
-        route="{{route}}"
-        pattern="/:page"
-        data="{{routeData}}"
-        tail="{{routeTail}}">
-    </app-route>
     <firebase-app
       app="cgr"
       api-key="AIzaSyAlzk6-3Iq1Z6F8QiElZq4mQUMwTzwJhUk"
       auth-domain="cgr-web.firebaseapp.com"
       database-url="https://cgr-web.firebaseio.com">
     </firebase-app>
+    <firebase-auth
+      id="firebaseAuth"
+      signed-in="{{signedIn}}"
+      user="{{user}}"
+      provider="google">
+    </firebase-auth>
     <firebase-query
       app="cgr"
       path="compentency"
-      data="{{compentencies}}">
+      data="{{competencies}}">
     </firebase-query>
-    <iron-pages selected="{{pageSelected}}" attr-for-selected="name">
-      <div class="page" name="about">
-        Introduction Pages (Apresentation, Login)
-      </div>
-      <div class="page" name="questionary">
-        <mtz-wizard-stepper steps="[[questionarySteps]]" selected="{{questionarySelected}}"></mtz-wizard-stepper>
-        <mtz-wizard id="wizard" active steps="{{questionarySteps}}" selected="{{questionarySelected}}">
-          <template is="dom-repeat" items="{{compentencies}}" as="compentency">
-            <mtz-wizard-step class$="color{{compentency.order}}" name="{{compentency.$key}}" label="{{compentency.name}}">
-              <h2>{{compentency.name}}</h2>
-              <template is="dom-repeat" items="{{_toArray(compentency.question)}}" as="question">
-                <cgr-question main-title={{question.value.name}} color={{compentency.order}}></cgr-question>    
-              </template>
-            </mtz-wizard-step>  
+    <div id="loginArea" class$={{loginClass}}>
+      <paper-material id="loginBox" elevation=2>
+        <h1>
+          SDA Competency Grouwth Review
+        </h1>
+        <h2>
+          Create a personal development plan for the coming year
+        </h2>
+        <paper-button id="loginButton" raised on-click="login">Start</paper-button>
+        <h5>Build with love by OpenAdventist</h5>
+      </paper-material>
+    </div>
+    <div id="appArea" class$="{{loginClass}}">
+      <!-- <app-toolbar>
+        <paper-icon-button icon="material:assignment" on-click="callQuestionaryPage"></paper-icon-button>
+        <div main-title>Competency Grouwth Review</div>
+        <paper-icon-button id="startButton" class$="{{loginClass}}" icon="material:account-circle" on-click="login"></paper-icon-button>
+      </app-toolbar> -->
+      <iron-pages selected="{{pageSelected}}" attr-for-selected="name">
+        <div class="page" name="about">
+          Introduction Pages (Apresentation, Login)
+        </div>
+        <div class="page" name="questionary">
+          <iron-pages id="competencyPages" selected="{{competencySelected}}" attr-for-selected="name">
+            <template is="dom-repeat" items="{{competencies}}" as="competency">
+              <div name="competency-{{competency.order}}">
+                <app-toolbar class$="competencyToolbar color{{competency.order}}">
+                  <paper-icon-button id="startButton" class$="{{loginClass}}" icon="material:close" on-click="login"></paper-icon-button>
+                  <div main-title>{{competency.name}}</div>
+                  <paper-icon-button icon="material:arrow-back" on-click="competencyPagesBack"></paper-icon-button>
+                  <paper-icon-button icon="material:arrow-forward" on-click="competencyPagesForward"></paper-icon-button>
+                  <paper-icon-button icon="material:check" on-click="callResultPage"></paper-icon-button>
+                </app-toolbar>
+                <template is="dom-repeat" items="{{_toArray(competency.question)}}" as="question">
+                  <cgr-question
+                    user-uid="{{user.uid}}"
+                    competency-key={{competency.$key}}
+                    competency-color={{competency.order}}
+                    question="{{question}}">
+                  </cgr-question>    
+                </template>
+              </div>
+            </template>
+          </iron-pages>
+        </div>
+        <div class="page" name="result">
+          <app-toolbar>
+            <paper-icon-button icon="material:arrow-back" on-click="callQuestionaryPage"></paper-icon-button>
+            <div main-title>Results for {{user.displayName}}</div>
+            <paper-icon-button id="startButton" class$="{{loginClass}}" icon="material:account-circle" on-click="login"></paper-icon-button>
+          </app-toolbar>
+          <template is="dom-repeat" items="{{competencies}}" as="competency">
+            <cgr-result-item
+              user-uid="{{user.uid}}"
+              competency-key={{competency.$key}}
+              max={{competency.max}}
+              color="{{competency.order}}"
+              main-title="{{competency.name}}">
+            </cgr-result-item>
           </template>
-        </mtz-wizard>
-        <mtz-wizard-stepper steps="[[questionarySteps]]" selected="{{questionarySelected}}"></mtz-wizard-stepper>
-      </div>
-      <div class="page" name="result">
-        <h1>Competency Profile</h1>
-        <template is="dom-repeat" items="{{compentencies}}" as="compentency">
-          <cgr-result-item color="{{compentency.order}}" name="{{compentency.$key}}" value=50 main-title="{{compentency.name}}"></cgr-result-item>
-        </template>
-      </div>
-    </iron-pages>
+        </div>
+      </iron-pages>
+    </div>
   </template>
 
   <script>
@@ -95,13 +158,22 @@
       static get is() { return 'cgr-web-app'; }
       static get properties() {
         return {
+          signedIn: {
+            type: Boolean
+          },
+          user: {
+            type: Object
+          },
+          loginClass: {
+            computed: 'computeLoginClass(signedIn)'
+          },
           pageSelected: {
             type: String,
-            computed: 'computedPageSelected(routeData.page)',
-            value: 'result'
+            value: 'questionary'
           },
-          questionarySelected: {
-            type: Object
+          competencySelected: {
+            type: String,
+            value: 'competency-1'
           },
           questionarySteps: {
             type: Array
@@ -111,13 +183,39 @@
       _toArray(obj) {
         return Object.keys(obj).map(function(key) {
           return {
-            name: key,
-            value: obj[key]
+            $key: key,
+            val: obj[key]
           };
         });
       }
       computedPageSelected(routeDataPage) {
         return routeDataPage
+      }
+      login(){
+        if (!this.user) {
+          firebase.auth().signInWithPopup(
+            new firebase.auth.GoogleAuthProvider()
+              .addScope('profile')
+              .addScope('email')
+          )
+        } else {
+          firebase.auth().signOut()
+        }
+      }
+      computeLoginClass(signedIn) {
+        return signedIn ? 'signedIn' : 'notSigned'
+      }
+      competencyPagesForward(event) {
+        this.$.competencyPages.selectNext()
+      }
+      competencyPagesBack(event) {
+        this.$.competencyPages.selectPrevious()
+      }
+      callQuestionaryPage(event) {
+        this.pageSelected = 'questionary'
+      }
+      callResultPage(event) {
+        this.pageSelected = 'result'
       }
     }
 

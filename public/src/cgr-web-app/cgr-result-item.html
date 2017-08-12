@@ -1,5 +1,7 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 
+<link rel="import" href="../../bower_components/polymerfire/firebase-document.html">
+
 <link rel="import" href="../../bower_components/paper-progress/paper-progress.html">
 <link rel="import" href="../../bower_components/paper-material/paper-material.html">
 
@@ -14,13 +16,14 @@
             :host {
                 display: block
             }
-            paper-material.color1 { background-color: var(--paper-green-100); }
-            paper-material.color2 { background-color: var(--paper-pink-100); }
-            paper-material.color3 { background-color: var(--paper-yellow-100); }
-            paper-material.color4 { background-color: var(--paper-teal-100); }
-            paper-material.color5 { background-color: var(--paper-blue-100); }
-            paper-material.color6 { background-color: var(--paper-grey-100); }
-            paper-material.color7 { background-color: var(--paper-amber-100); }
+            #container { display: block; }
+            #container.color1 { background-color: var(--paper-green-100); }
+            #container.color2 { background-color: var(--paper-pink-100); }
+            #container.color3 { background-color: var(--paper-yellow-100); }
+            #container.color4 { background-color: var(--paper-teal-100); }
+            #container.color5 { background-color: var(--paper-blue-100); }
+            #container.color6 { background-color: var(--paper-grey-100); }
+            #container.color7 { background-color: var(--paper-amber-100); }
             h2 {
                 font-weight: lighter;
                 padding: 15px;
@@ -42,7 +45,12 @@
             .color6 { --paper-progress-active-color: var(--paper-grey-700); }
             .color7 { --paper-progress-active-color: var(--paper-amber-700); }
         </style>
-        <paper-material elevation=1 class$="color{{color}}">
+        <firebase-document
+        app="cgr"
+        path="results/{{userUid}}/2017/{{competencyKey}}"
+        data="{{results}}">
+        </firebase-document>
+        <paper-material id="container" elevation=1 class$="color{{color}}">
             <h2>{{mainTitle}}</h2>
             <paper-progress class$="color{{color}}" value="{{value}}"></paper-progress>
         </paper-material>
@@ -55,6 +63,15 @@
 
             static get properties() {
                 return {
+                    userUid: {
+                        type: String
+                    },
+                    competencyKey: {
+                        type: String
+                    },
+                    max: {
+                        type: Number
+                    },
                     mainTitle: {
                         type: String
                     },
@@ -67,6 +84,12 @@
                 };
             }
 
+            static get observers() {
+                return [
+                    'computeValue(results.*)'
+                ]
+            }
+
             constructor() {
                 super();
             }
@@ -76,6 +99,29 @@
 
                 Polymer.RenderStatus.afterNextRender(this, function() {
                     
+                });
+            }
+
+            computeValue(results) {
+                var array = this._toArray(results.base)
+                var total = 0
+                if (array.length > 0) {
+                    var values = array.map(function(element){
+                        return element.val.value
+                    })
+                    for (var index = 0; index < values.length; index++) {
+                        total = total + values[index]
+                    }
+                }
+                this.value = (total / this.max) * 100
+            }
+
+            _toArray(obj) {
+                return Object.keys(obj).map(function(key) {
+                    return {
+                        $key: key,
+                        val: obj[key]
+                    };
                 });
             }
 
