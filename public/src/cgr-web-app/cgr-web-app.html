@@ -70,6 +70,10 @@
 
       /* #startButton.signedIn { color: var(--paper-teal-700); } */
       
+      #competencyProgress {
+        min-width: initial;
+      }
+
     </style>
     <firebase-app
       app="cgr"
@@ -116,7 +120,9 @@
               <div name="competency-{{competency.order}}">
                 <app-toolbar class$="competencyToolbar color{{competency.order}}">
                   <paper-icon-button id="startButton" class$="{{loginClass}}" icon="material:close" on-click="login"></paper-icon-button>
-                  <div main-title>{{competency.name}}</div>
+                  <div main-title>
+                    <paper-button id="competencyProgress">{{competency.order}} / 7</paper-button>
+                    {{competency.name}}</div>
                   <paper-icon-button icon="material:arrow-back" on-click="competencyPagesBack"></paper-icon-button>
                   <paper-icon-button icon="material:arrow-forward" on-click="competencyPagesForward"></paper-icon-button>
                   <paper-icon-button icon="material:check" on-click="callResultPage"></paper-icon-button>
