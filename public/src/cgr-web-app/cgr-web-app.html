@@ -135,6 +135,15 @@
                     question="{{question}}">
                   </cgr-question>    
                 </template>
+                <app-toolbar class$="competencyToolbar color{{competency.order}}">
+                  <div main-title>
+                    <paper-button id="competencyProgress">{{competency.order}} / 7</paper-button>
+                    {{competency.name}}
+                  </div>
+                  <paper-icon-button icon="material:arrow-back" on-click="competencyPagesBack"></paper-icon-button>
+                  <paper-icon-button icon="material:arrow-forward" on-click="competencyPagesForward"></paper-icon-button>
+                  <paper-icon-button icon="material:check" on-click="callResultPage"></paper-icon-button>
+                </app-toolbar>
               </div>
             </template>
           </iron-pages>
@@ -211,9 +220,11 @@
         return signedIn ? 'signedIn' : 'notSigned'
       }
       competencyPagesForward(event) {
+        this.scrollToTop()
         this.$.competencyPages.selectNext()
       }
       competencyPagesBack(event) {
+        this.scrollToTop()
         this.$.competencyPages.selectPrevious()
       }
       callQuestionaryPage(event) {
@@ -222,6 +233,9 @@
       callResultPage(event) {
         this.pageSelected = 'result'
       }
+      scrollToTop() {
+				document.getElementsByTagName('html')[0].scroll({ top: 0, behavior: 'smooth' });
+			}
     }
 
     window.customElements.define(CgrWebApp.is, CgrWebApp);
