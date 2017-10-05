@@ -234,7 +234,7 @@
         this.pageSelected = 'result'
       }
       scrollToTop() {
-				document.getElementsByTagName('html')[0].scroll({ top: 0, behavior: 'smooth' });
+        document.documentElement.scrollTop = 0
 			}
     }
 
