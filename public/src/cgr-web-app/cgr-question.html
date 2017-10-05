@@ -4,129 +4,181 @@
 
 <link rel="import" href="../../bower_components/polymerfire/firebase-document.html">
 
+<link rel="import" href="../../bower_components/paper-badge/paper-badge.html">
+
 <!--
 `<cgr-question>` is Description
 
 @element cgr-question
 -->
 <dom-module id="cgr-question">
-    <template>
-        <style>
-            :host {
-                display: block;
-                padding: 30px;
-                background-color: rgba(255,255,255,.95);
-            }
-            h3 {
-                font-weight: lighter;
-            }
-            paper-slider {
-                margin-top: 30px;
-                width: 100%;
-            }
-            .color1 {
-                --paper-slider-active-color: var(--paper-green-700);
-                --paper-slider-secondary-color: var(--paper-green-300);
-                --paper-slider-knob-color: var(--paper-green-700);
-                --paper-slider-pin-color: var(--paper-green-700);
-            }
-            .color2 {
-                --paper-slider-active-color: var(--paper-pink-700);
-                --paper-slider-secondary-color: var(--paper-pink-300);
-                --paper-slider-knob-color: var(--paper-pink-700);
-                --paper-slider-pin-color: var(--paper-pink-700);
-            }
-            .color3 {
-                --paper-slider-active-color: var(--paper-yellow-700);
-                --paper-slider-secondary-color: var(--paper-yellow-300);
-                --paper-slider-knob-color: var(--paper-yellow-700);
-                --paper-slider-pin-color: var(--paper-yellow-700);
-            }
-            .color4 {
-                --paper-slider-active-color: var(--paper-teal-700);
-                --paper-slider-secondary-color: var(--paper-teal-300);
-                --paper-slider-knob-color: var(--paper-teal-700);
-                --paper-slider-pin-color: var(--paper-teal-700);
-            }
-            .color5 {
-                --paper-slider-active-color: var(--paper-blue-700);
-                --paper-slider-secondary-color: var(--paper-blue-300);
-                --paper-slider-knob-color: var(--paper-blue-700);
-                --paper-slider-pin-color: var(--paper-blue-700);
-            }
-            .color6 {
-                --paper-slider-active-color: var(--paper-grey-700);
-                --paper-slider-secondary-color: var(--paper-grey-300);
-                --paper-slider-knob-color: var(--paper-grey-700);
-                --paper-slider-pin-color: var(--paper-grey-700);
-            }
-            .color7 {
-                --paper-slider-active-color: var(--paper-amber-700);
-                --paper-slider-secondary-color: var(--paper-amber-300);
-                --paper-slider-knob-color: var(--paper-amber-700);
-                --paper-slider-pin-color: var(--paper-amber-700);
-            }
-        </style>
-    <firebase-document
-      app="cgr"
-      path="results/{{userUid}}/2017/{{competencyKey}}/{{question.$key}}/value"
-      data="{{result}}">
-    </firebase-document>
-        <h3>{{mainTitle}}</h3>
-        <paper-slider value="{{result}}" class$="color{{competencyColor}}" markers max-markers=5 min=1 max=5 snaps step=1 pin></paper-slider>
-    </template>
-    <script>
-        class CGRQuestionElement extends Polymer.Element {
+	<template>
+		<style>
+			:host {
+				display: block;
+				padding: 30px;
+				background-color: rgba(255,255,255,.95);
+			}
+			h3 {
+				font-weight: lighter;
+			}
+			.nameResult{
+				font-size: 10px;
+				background-color: var(--name-result-color);
+				color: #fff;
+				margin-left: 7px;
+				padding: 7px;
+				border-radius: 12px;
+			}
+			h3, .nameResult{
+				display: inline-block;
+			}
+			paper-slider {
+				margin-top: 30px;
+				width: 100%;
+			}
+			.color1 {
+				--paper-slider-active-color: var(--paper-green-700);
+				--paper-slider-secondary-color: var(--paper-green-300);
+				--paper-slider-knob-color: var(--paper-green-700);
+				--paper-slider-pin-color: var(--paper-green-700);
+				--name-result-color: var(--paper-green-700);
+			}
+			.color2 {
+				--paper-slider-active-color: var(--paper-pink-700);
+				--paper-slider-secondary-color: var(--paper-pink-300);
+				--paper-slider-knob-color: var(--paper-pink-700);
+				--paper-slider-pin-color: var(--paper-pink-700);
+				--name-result-color: var(--paper-pink-700);
+			}
+			.color3 {
+				--paper-slider-active-color: var(--paper-yellow-700);
+				--paper-slider-secondary-color: var(--paper-yellow-300);
+				--paper-slider-knob-color: var(--paper-yellow-700);
+				--paper-slider-pin-color: var(--paper-yellow-700);
+				--name-result-color: var(--paper-yellow-700);
+			}
+			.color4 {
+				--paper-slider-active-color: var(--paper-teal-700);
+				--paper-slider-secondary-color: var(--paper-teal-300);
+				--paper-slider-knob-color: var(--paper-teal-700);
+				--paper-slider-pin-color: var(--paper-teal-700);
+				--name-result-color: var(--paper-teal-700);
+			}
+			.color5 {
+				--paper-slider-active-color: var(--paper-blue-700);
+				--paper-slider-secondary-color: var(--paper-blue-300);
+				--paper-slider-knob-color: var(--paper-blue-700);
+				--paper-slider-pin-color: var(--paper-blue-700);
+				--name-result-color: var(--paper-blue-700);
+			}
+			.color6 {
+				--paper-slider-active-color: var(--paper-grey-700);
+				--paper-slider-secondary-color: var(--paper-grey-300);
+				--paper-slider-knob-color: var(--paper-grey-700);
+				--paper-slider-pin-color: var(--paper-grey-700);
+				--name-result-color: var(--paper-grey-700);
+			}
+			.color7 {
+				--paper-slider-active-color: var(--paper-amber-700);
+				--paper-slider-secondary-color: var(--paper-amber-300);
+				--paper-slider-knob-color: var(--paper-amber-700);
+				--paper-slider-pin-color: var(--paper-amber-700);
+				--name-result-color: var(--paper-amber-700);
+			}
+		</style>
+		<firebase-document
+			app="cgr"
+			path="results/{{userUid}}/2017/{{competencyKey}}/{{question.$key}}/value"
+			data="{{result}}">
+		</firebase-document>
+		<div class="titleBox">
+			<h3>{{mainTitle}}</h3>
+			<div class$="color{{competencyColor}} nameResult">{{nameResult}}</div>
+		</div>
+		<paper-slider
+			value="{{result}}"
+			class$="color{{competencyColor}}"
+			immediate-value="{{immediateValue}}"
+			markers
+			max-markers=5
+			min=1
+			max=5
+			snaps
+			step=1
+			pin>
+		</paper-slider>
+	</template>
+	<script>
+		class CGRQuestionElement extends Polymer.Element {
 
-            static get is() { return 'cgr-question'; }
+			static get is() { return 'cgr-question'; }
 
-            static get properties() {
-                return {
-                    userUid: {
-                        type: String
-                    },
-                    competencyKey: {
-                        type: String
-                    },
-                    competencyColor: {
-                        type: Number
-                    },
-                    question: {
-                        type: Object
-                    },
-                    mainTitle: {
-                        type: String,
-                        computed: 'computeMainTitle(question.val.name)'
-                    },
-                    result: {
-                        type: Number,
-                        notify: true
-                    }
-                };
-            }
+			static get properties() {
+				return {
+					userUid: {
+						type: String
+					},
+					competencyKey: {
+						type: String
+					},
+					competencyColor: {
+						type: Number
+					},
+					question: {
+						type: Object
+					},
+					mainTitle: {
+						type: String,
+						computed: 'computeMainTitle(question.val.name)'
+					},
+					result: {
+						type: Number,
+						notify: true
+					},
+					results: {
+						type: Array,
+						value: [
+							"Very weak",
+							"Weak",
+							"Average",
+							"Strong",
+							"Very strong"
+						]
+					},
+					nameResult: {
+						type: String,
+						computed: 'changeNameResult(immediateValue)'
+					}
+				};
+			}
 
-            constructor() {
-                super();
-            }
+			constructor() {
+				super();
+			}
 
-            ready() {
-                super.ready();
+			ready() {
+				super.ready();
 
-                Polymer.RenderStatus.afterNextRender(this, function() {
-                    
-                });
-            }
+				Polymer.RenderStatus.afterNextRender(this, function() {
 
-            computeMainTitle(questionValName){
-                return questionValName
-            }
+				});
+			}
 
-            computeColor(competencyOrder) {
-                return competencyOrder
-            }
+			computeMainTitle(questionValName){
+				return questionValName
+			}
 
-        }
+			computeColor(competencyOrder) {
+				return competencyOrder
+			}
 
-        window.customElements.define(CGRQuestionElement.is, CGRQuestionElement);
-    </script>
+			changeNameResult(immediateValue){
+				return this.results.filter((result, index) => ++index == immediateValue);
+			}
+
+		}
+
+		window.customElements.define(CGRQuestionElement.is, CGRQuestionElement);
+	</script>
 </dom-module>
