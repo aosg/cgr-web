@@ -1,0 +1,25 @@
+{
+	"skipTerminateQuickPick": true,
+	"skipSwitchToOutput": false,
+	"skipErrorMessage": true,
+	"commands": [
+		{
+			"text": "Serve",
+			"tooltip": "Polymer Serve",
+			"color": "yellow",
+			"command": "polymer serve public/",
+			"alignment": "left",
+			"skipTerminateQuickPick": true,
+			"priority": 0
+        },
+        {
+			"text": "Deploy",
+			"tooltip": "Only Hosting",
+			"color": "yellow",
+			"command": "firebase deploy --only hosting",
+			"alignment": "left",
+            "skipTerminateQuickPick": false,
+			"priority": 0
+		}
+	]
+}
