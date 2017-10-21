@@ -113,7 +113,7 @@
             <template is="dom-repeat" items="{{competencies}}" as="competency">
               <div name="competency-{{competency.order}}">
                 <app-toolbar class$="competencyToolbar color{{competency.order}}">
-                  <paper-icon-button id="startButton" class$="{{loginClass}}" icon="material:close" on-click="login"></paper-icon-button>
+                  <paper-icon-button id="startButton" class$="{{loginClass}}" icon="material:close" on-click="logout"></paper-icon-button>
                   <div main-title>
                     <paper-button id="competencyProgress">{{competency.order}} / 7</paper-button>
                     {{competency.name}}</div>
