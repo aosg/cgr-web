@@ -27,10 +27,9 @@
         display: block;
       }
 
-      #loginArea { display: block; }
-      #loginArea.signedIn { display: none; }
-      #appArea { display: none; }
-      #appArea.signedIn { display: block; }
+      [hidden] {
+        display: none;
+      }
 
       #loginBox {
         height: 390px;
@@ -76,7 +75,6 @@
 
     </style>
     <firebase-app
-      app="cgr"
       api-key="AIzaSyAlzk6-3Iq1Z6F8QiElZq4mQUMwTzwJhUk"
       auth-domain="cgr-web.firebaseapp.com"
       database-url="https://cgr-web.firebaseio.com">
@@ -88,29 +86,25 @@
       provider="google">
     </firebase-auth>
     <firebase-query
-      app="cgr"
       path="compentency"
       data="{{competencies}}">
     </firebase-query>
-    <div id="loginArea" class$={{loginClass}}>
-      <paper-material id="loginBox" elevation=2>
-        <h1>
-          Ministerial Competency Growth Review
-        </h1>
-        <h2>
-          Helping to create a professional development plan for the coming year
-        </h2>
-        <paper-button id="loginButton" raised on-click="login">Start</paper-button>
-        <h5>Open Source with ❤️ by Adventist Group</h5>
-      </paper-material>
-    </div>
-    <div id="appArea" class$="{{loginClass}}">
-      <!-- <app-toolbar>
-        <paper-icon-button icon="material:assignment" on-click="callQuestionaryPage"></paper-icon-button>
-        <div main-title>Competency Grouwth Review</div>
-        <paper-icon-button id="startButton" class$="{{loginClass}}" icon="material:account-circle" on-click="login"></paper-icon-button>
-      </app-toolbar> -->
+    <div id="appArea">
       <iron-pages selected="{{pageSelected}}" attr-for-selected="name">
+        <div class="page" name="login">
+          <div id="loginArea">
+            <paper-material id="loginBox" elevation=2>
+              <h1>
+                Ministerial Competency Growth Review
+              </h1>
+              <h2>
+                Helping to create a professional development plan for the coming year
+              </h2>
+              <paper-button id="loginButton" raised on-click="login">Start</paper-button>
+              <h5>Open Source with ❤️ by Adventist Group</h5>
+            </paper-material>
+          </div>
+        </div>
         <div class="page" name="about">
           Introduction Pages (Apresentation, Login)
         </div>
@@ -183,7 +177,7 @@
           },
           pageSelected: {
             type: String,
-            value: 'questionary'
+            value: 'login'
           },
           competencySelected: {
             type: String,
@@ -193,6 +187,10 @@
             type: Array
           }
         };
+      }
+      connectedCallback() {
+        super.connectedCallback();
+        window.app = this;
       }
       _toArray(obj) {
         return Object.keys(obj).map(function(key) {
@@ -206,15 +204,21 @@
         return routeDataPage
       }
       login(){
-        if (!this.user) {
+        if (!this.signedIn) {
           firebase.auth().signInWithPopup(
             new firebase.auth.GoogleAuthProvider()
               .addScope('profile')
               .addScope('email')
-          )
+          ).then(function(result) {
+            app.pageSelected = 'questionary'
+          });
         } else {
-          firebase.auth().signOut()
+          app.pageSelected = 'questionary'
         }
+      }
+      logout(){
+        firebase.auth().signOut()
+          app.pageSelected = 'login'
       }
       computeLoginClass(signedIn) {
         return signedIn ? 'signedIn' : 'notSigned'
